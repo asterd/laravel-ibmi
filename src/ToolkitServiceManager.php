@@ -2,28 +2,30 @@
 
 namespace Cooperl\IBMi;
 
-use ToolkitService;
+use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
+use Illuminate\Support\Facades\DB;
+use ToolkitApi\Toolkit;
 
 class ToolkitServiceManager
 {
     /**
      * The application instance.
      *
-     * @var \Illuminate\Foundation\Application
+     * @var Application
      */
-    protected $app;
+    protected Application $app;
     /**
      * The active connection instances.
      *
      * @var array
      */
-    protected $connections = [];
+    protected array $connections = [];
 
     /**
      * Create a new toolkit manager instance.
      *
-     * @param  \Illuminate\Foundation\Application $app
+     * @param  Application $app
      * @return void
      */
     public function __construct($app)
@@ -34,10 +36,11 @@ class ToolkitServiceManager
     /**
      * Get a toolkit connection instance.
      *
-     * @param  string $name
-     * @return \ToolkitApi\ToolkitService
+     * @param string|null $name
+     * @return Toolkit
+     * @throws \Exception
      */
-    public function connection($name = null)
+    public function connection(string $name = null): Toolkit
     {
         // If we haven't created this connection, we'll create it based on the config
         // provided in the application. Once we've created the connections we will
@@ -52,10 +55,11 @@ class ToolkitServiceManager
     /**
      * Make the toolkit connection instance.
      *
-     * @param  string $name
-     * @return \ToolkitApi\ToolkitService
+     * @param string $name
+     * @return Toolkit
+     * @throws \Exception
      */
-    protected function makeConnection($name)
+    protected function makeConnection(string $name): Toolkit
     {
         $config = $this->getConfig($name);
 
@@ -73,11 +77,15 @@ class ToolkitServiceManager
             case 'db2_ibmi_ibm':
                 $transportType = 'ibm_db2';
                 break;
+            case 'db2':
+                $transportType = 'pdo';
+                $database = DB::connection($name)->getPdo();
+                break;
             default:
                 break;
         }
 
-        $toolKit = new \ToolkitApi\Toolkit($database, $username, $password, $transportType, $isPersistent);
+        $toolKit = new Toolkit($database, $username, $password, $transportType, $isPersistent);
         $toolKit->setOptions($config["toolkit"]);
 
         return $toolKit;
@@ -86,12 +94,12 @@ class ToolkitServiceManager
     /**
      * Get the configuration for a connection.
      *
-     * @param  string $name
+     * @param string $name
      * @return array
      *
      * @throws \InvalidArgumentException
      */
-    protected function getConfig($name)
+    protected function getConfig(string $name): array
     {
         $name = $name ?: config('database.default');
 
@@ -107,7 +115,7 @@ class ToolkitServiceManager
         return $config;
     }
 
-    protected function getDsn(array $config)
+    protected function getDsn(array $config): string
     {
         $dsnParts = [
             'DRIVER=%s',
@@ -143,10 +151,10 @@ class ToolkitServiceManager
     /**
      * Set the default connection name.
      *
-     * @param  string $name
+     * @param string $name
      * @return void
      */
-    public function setDefaultConnection($name)
+    public function setDefaultConnection(string $name): void
     {
         config(['database.default' => $name]);
     }
@@ -154,9 +162,10 @@ class ToolkitServiceManager
     /**
      * Dynamically pass methods to the default connection.
      *
-     * @param  string $method
-     * @param  array  $parameters
+     * @param string $method
+     * @param array $parameters
      * @return mixed
+     * @throws \Exception
      */
     public function __call($method, $parameters)
     {
