@@ -40,7 +40,7 @@ class ToolkitServiceManager
      * @return Toolkit
      * @throws \Exception
      */
-    public function connection(string $name = null): Toolkit
+    public function connection(?string $name = null): Toolkit
     {
         // If we haven't created this connection, we'll create it based on the config
         // provided in the application. Once we've created the connections we will
@@ -59,7 +59,7 @@ class ToolkitServiceManager
      * @return Toolkit
      * @throws \Exception
      */
-    protected function makeConnection(string $name): Toolkit
+    protected function makeConnection(?string $name): Toolkit
     {
         $config = $this->getConfig($name);
 
@@ -99,7 +99,7 @@ class ToolkitServiceManager
      *
      * @throws \InvalidArgumentException
      */
-    protected function getConfig(string $name): array
+    protected function getConfig(?string $name): array
     {
         $name = $name ?: config('database.default');
 
@@ -154,7 +154,7 @@ class ToolkitServiceManager
      * @param string $name
      * @return void
      */
-    public function setDefaultConnection(string $name): void
+    public function setDefaultConnection(?string $name): void
     {
         config(['database.default' => $name]);
     }
