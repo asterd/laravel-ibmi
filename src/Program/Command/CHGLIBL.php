@@ -14,21 +14,15 @@ class CHGLIBL extends Command
 
     /**
      * @param $libraries
-     * @return mixed
+     * @return array|bool
      * @throws \Exception
      */
-    public function execute($libraries)
+    public function execute($libraries): bool|array
     {
         if(is_array($libraries))
         {
             $libraries = implode(' ', $libraries);
         }
-
-        //TODO create normalizeStringMethod
-        /*if(PHP_SAPI == 'cli') {
-            $libraries = str_replace('§', chr(167), $libraries);
-            $libraries = str_replace(chr(63), chr(167), $libraries);
-        }*/
 
         if(empty($libraries)) {
             throw new \RuntimeException('CHGLIBL expects non empty library list');

@@ -2,6 +2,7 @@
 
 namespace Cooperl\IBMi;
 
+use Exception;
 use Illuminate\Foundation\Application;
 use Illuminate\Support\Arr;
 use Illuminate\Support\Facades\DB;
@@ -38,7 +39,7 @@ class ToolkitServiceManager
      *
      * @param string|null $name
      * @return Toolkit
-     * @throws \Exception
+     * @throws Exception
      */
     public function connection(?string $name = null): Toolkit
     {
@@ -55,9 +56,9 @@ class ToolkitServiceManager
     /**
      * Make the toolkit connection instance.
      *
-     * @param string $name
+     * @param string|null $name
      * @return Toolkit
-     * @throws \Exception
+     * @throws Exception
      */
     protected function makeConnection(?string $name): Toolkit
     {
@@ -94,14 +95,16 @@ class ToolkitServiceManager
     /**
      * Get the configuration for a connection.
      *
-     * @param string $name
+     * @param string|null $name
      * @return array
      *
-     * @throws \InvalidArgumentException
      */
     protected function getConfig(?string $name): array
     {
-        $name = $name ?: config('database.default');
+        if ($name === null || '' === trim($name)) {
+            $name = config('database.toolkit') ?? config('database.default') ?? '';
+        }
+        // $name = $name ?: config('database.default');
 
         // To get the database connection configuration, we will just pull each of the
         // connection configurations and get the configurations for the given name.
@@ -151,7 +154,7 @@ class ToolkitServiceManager
     /**
      * Set the default connection name.
      *
-     * @param string $name
+     * @param string|null $name
      * @return void
      */
     public function setDefaultConnection(?string $name): void
@@ -165,7 +168,7 @@ class ToolkitServiceManager
      * @param string $method
      * @param array $parameters
      * @return mixed
-     * @throws \Exception
+     * @throws Exception
      */
     public function __call($method, $parameters)
     {
