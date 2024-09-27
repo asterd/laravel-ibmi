@@ -147,7 +147,7 @@ class RPGProgram extends Program
                     break;
                 case Program::TYPE_DATA_STRUCTURE:
                     $callParams = $this->prepareParams(is_array($param->getValue())?$param->getValue():$param->getValue()->getParams());
-                    $params[] = ToolkitService::AddDataStruct($callParams, $param->name, 0, '', false, null, $param->description, $param->io);
+                    $params[] = ToolkitService::AddDataStruct($callParams, $param->name, $param->arrayDimension ?? 0, '',(($param->arrayDimension ?? 0) > 0), null, $param->description, $param->io);
             }
         }
 
