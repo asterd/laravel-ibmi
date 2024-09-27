@@ -239,7 +239,7 @@ class ParamBuilder
                     $items[2] = str_replace(["DIM(", ")"], "", $items[2]);
                     $len = (int) $items[2];
                 }
-                $this->addParam($position, $io, $name, $len, $type, $scale, $description);
+                $this->addParam($position, $io, $name, $len, $type, $scale, $description, $len);
             } else {
                 // otherwise read standard data
                 $len = (int)substr($items[1], 0, -1);
