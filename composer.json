@@ -20,7 +20,7 @@
     ],
     "require": {
         "php": "^8.0|^8.2",
-        "laravel/framework": "^10|^11",
+        "laravel/framework": "^10|^11|^12",
         "zendtech/ibmitoolkit": "^1.9"
     },
     "require-dev": {
