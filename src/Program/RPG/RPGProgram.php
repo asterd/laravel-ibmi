@@ -25,7 +25,7 @@ class RPGProgram extends Program
 
     private string $libl;
 
-    public function __construct(String $libl, LoggerInterface $logger = null)
+    public function __construct(String $libl, ?LoggerInterface $logger = null)
     {
         $this->libl = $libl;
         parent::__construct($logger);
