@@ -44,7 +44,7 @@ class ParamBuilder
      */
     public function getParams(): array
     {
-        usort($this->ds, static function($a, $b) { return $a->getPosition() > $b->getPosition(); });
+        usort($this->ds, static function($a, $b) { return $a->getPosition() <=> $b->getPosition(); });
         return $this->ds;
     }
 

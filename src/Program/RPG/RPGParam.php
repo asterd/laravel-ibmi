@@ -33,6 +33,7 @@ class RPGParam
     public string $io;
     public int $length;
     public int $scale;
+    public int $arrayDimension;
     public string $name;
     public string $description;
     public $value;

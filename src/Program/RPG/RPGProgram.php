@@ -108,7 +108,7 @@ class RPGProgram extends Program
         foreach ($dataParams as $param) {
             switch ($param->getDataType()) {
                 case Program::TYPE_CHAR:
-                    $value = str_pad($param->value, $param->length, " ", STR_PAD_RIGHT);
+                    $value = str_pad($param->value ?? '', $param->length, " ", STR_PAD_RIGHT);
                     $params[] = ToolkitService::AddParameterChar($param->io, $param->length , $param->description, $param->name, $value, 'off', $param->arrayDimension, '', $param->arrayDimension > 0);
                     break;
                 case Program::TYPE_INT32:
