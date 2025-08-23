@@ -51,7 +51,7 @@ class RPGProgram extends Program
      * @param string|null $dsName
      * @return RPGProgram
      */
-    public function setParamValue(string $paramName, $value, string $dsName = null): RPGProgram {
+    public function setParamValue(string $paramName, $value, ?string $dsName = null): RPGProgram {
         if (!$this->paramBuilder) {
             throw new \InvalidArgumentException('Param builder must be initialized!');
         }
